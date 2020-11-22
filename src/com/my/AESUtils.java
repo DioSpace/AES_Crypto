@@ -48,9 +48,9 @@ public class AESUtils {
             SecretKeySpec skeySpec = new SecretKeySpec(KEY.getBytes("ASCII"), ALGORITHM);
             IvParameterSpec iv = new IvParameterSpec(OFFSET.getBytes());//使用CBC模式，需要一个向量iv，可增加加密算法的强度
             cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
-            byte[] buffer = new BASE64Decoder().decodeBuffer(data);
+            byte[] buffer = new BASE64Decoder().decodeBuffer(data);//此处使用BASE64做转码
             byte[] encrypted = cipher.doFinal(buffer);
-            return new String(encrypted, ENCODING);//此处使用BASE64做转码
+            return new String(encrypted, ENCODING);
         } catch (NoSuchAlgorithmException | BadPaddingException | InvalidKeyException | InvalidAlgorithmParameterException | NoSuchPaddingException | IOException | IllegalBlockSizeException e) {
             e.printStackTrace();
         }
