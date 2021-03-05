@@ -12,13 +12,14 @@ import sun.misc.BASE64Encoder;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
 public class AESUtils {
     // 密匙
-    private static final String KEY = "thisisatestkey==";
+    private static final String key = "thisisatestkey==";
     // 偏移量
     private static final String OFFSET = "1234567890abcdef";
     // 编码
@@ -28,11 +29,18 @@ public class AESUtils {
     // 默认的加密算法
     private static final String CIPHER_ALGORITHM = "AES/CBC/PKCS5Padding";
 
+    // 加密和解密 的key和iv(偏移)是一样的
+    private static SecretKeySpec skeySpec;
+    private static IvParameterSpec iv;
+
+    static {
+        skeySpec = new SecretKeySpec(key.getBytes(StandardCharsets.US_ASCII), ALGORITHM);
+        iv = new IvParameterSpec(OFFSET.getBytes());//使用CBC模式，需要一个向量iv，可增加加密算法的强度
+    }
+
     public static String encrypt(String data) {
         try {
             Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
-            SecretKeySpec skeySpec = new SecretKeySpec(KEY.getBytes("ASCII"), ALGORITHM);
-            IvParameterSpec iv = new IvParameterSpec(OFFSET.getBytes());//使用CBC模式，需要一个向量iv，可增加加密算法的强度
             cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
             byte[] encrypted = cipher.doFinal(data.getBytes(ENCODING));
             return new BASE64Encoder().encode(encrypted);//此处使用BASE64做转码
@@ -45,8 +53,6 @@ public class AESUtils {
     public static String decrypt(String data) {
         try {
             Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
-            SecretKeySpec skeySpec = new SecretKeySpec(KEY.getBytes("ASCII"), ALGORITHM);
-            IvParameterSpec iv = new IvParameterSpec(OFFSET.getBytes());//使用CBC模式，需要一个向量iv，可增加加密算法的强度
             cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
             byte[] buffer = new BASE64Decoder().decodeBuffer(data);//此处使用BASE64做转码
             byte[] encrypted = cipher.doFinal(buffer);
