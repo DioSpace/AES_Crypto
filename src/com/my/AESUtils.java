@@ -26,12 +26,12 @@ public class AESUtils {
     private static final String ENCODING = "UTF-8";
     //算法
     private static final String ALGORITHM = "AES";
-    // 默认的加密算法
+    //AES是加密方式 CBC是工作模式 PKCS5Padding是填充模式
     private static final String CIPHER_ALGORITHM = "AES/CBC/PKCS5Padding";
 
     // 加密和解密 的key和iv(偏移)是一样的
     private static SecretKeySpec skeySpec;
-    private static IvParameterSpec iv;
+    private static IvParameterSpec iv; // AES 为16位
 
     static {
         skeySpec = new SecretKeySpec(key.getBytes(StandardCharsets.US_ASCII), ALGORITHM);

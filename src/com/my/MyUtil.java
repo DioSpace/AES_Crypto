@@ -1,6 +1,5 @@
 package com.my;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -14,7 +13,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 
 /*
- * AES对称加密和解密
+ * AES对称加密和解密,ECB 没有偏移
  */
 public class MyUtil {
 
